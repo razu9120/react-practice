@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import MemoForm from '../src/components/MemoForm';
+import MemoList from '../src/components/MemoList';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [memos, setMemos] = useState(JSON.parse(localStorage.getItem('memos')) || []);
+
+  useEffect(() => {
+    localStorage.setItem('memos', JSON.stringify(memos));
+  }, [memos]);
+
+  const addMemo = (memo) => {
+    setMemos([...memos, memo]);
+  };
+
+  const clearMemos = () => {
+    setMemos([]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Memo App</h2>
+      <MemoForm addMemo={addMemo} />
+      <button onClick={clearMemos}>Clear Memos</button>
+      <MemoList memos={memos} />
     </div>
   );
-}
+};
 
 export default App;
